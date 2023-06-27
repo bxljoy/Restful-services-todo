@@ -2,6 +2,7 @@ package com.alex.rest.webservices.restfulwebservices.todo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class TodoService {
 							LocalDate.now().plusYears(10), false ));
 		todos.add(new Todo(++todosCount, "alex", "Learn DevOps",
 				LocalDate.now().plusYears(11), false ));
-		todos.add(new Todo(++todosCount, "alex", "Learn Full Stack Development", 
+		todos.add(new Todo(++todosCount, "alex", "Learn Full Stack Development",
 				LocalDate.now().plusYears(12), false ));
 	}
 
@@ -41,7 +42,11 @@ public class TodoService {
 
 	public Todo findById(int id) {
 		Predicate<? super Todo> predicate = todo -> todo.getId() == id;
-		Todo todo = todos.stream().filter(predicate).findFirst().get();
+		Todo todo = null;
+		Optional<Todo> findFirst = todos.stream().filter(predicate).findFirst();
+		if (!findFirst.isEmpty()) {
+			todo = findFirst.get();
+		}
 		return todo;
 	}
 
