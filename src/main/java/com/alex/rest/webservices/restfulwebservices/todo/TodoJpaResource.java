@@ -10,43 +10,44 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-//@RestController
-public class TodoResource {
+@RestController
+public class TodoJpaResource {
 
-	private TodoService todoService;
+	private TodoJpaService todoJpaService;
 
-	public TodoResource(TodoService todoService) {
-		this.todoService = todoService;
+	public TodoJpaResource(TodoJpaService todoJpaService) {
+		this.todoJpaService = todoJpaService;
 	}
 
 	@GetMapping("/users/{username}/todos")
 	public List<Todo> retrieveTodos(@PathVariable String username) {
-		return todoService.findByUsername(username);
+		return todoJpaService.findByUsername(username);
 	}
 
 	@GetMapping("/users/{username}/todos/{id}")
 	public Todo retrieveTodo(@PathVariable String username, @PathVariable int id) {
-		return todoService.findById(id);
+		return todoJpaService.findById(id);
 	}
 
 	@DeleteMapping("/users/{username}/todos/{id}")
 	public ResponseEntity<Void> deleteTodo(@PathVariable String username, @PathVariable int id) {
-		todoService.deleteById(id);
+		todoJpaService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/users/{username}/todos/{id}")
 	public Todo updateTodo(@PathVariable String username, @PathVariable int id,
 			@RequestBody Todo todo) {
-		todoService.updateTodo(todo);
+		todoJpaService.updateTodo(todo);
 		return todo;
 	}
 
 	@PostMapping("/users/{username}/todos")
 	public Todo createTodo(@PathVariable String username, @RequestBody Todo todo) {
-		Todo addTodo = todoService.addTodo(username, todo.getDescription(), todo.getTargetDate(), todo.isDone());
+		Todo addTodo = todoJpaService.addTodo(username, todo.getDescription(), todo.getTargetDate(), todo.isDone());
 		return addTodo;
 	}
 }
